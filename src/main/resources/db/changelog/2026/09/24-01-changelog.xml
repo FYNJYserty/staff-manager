@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-5.0.xsd"
+        objectQuotingStrategy="QUOTE_ONLY_RESERVED_WORDS">
+    <changeSet id="1790257739246-1" author="fynjy">
+        <createTable tableName="department">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="department_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1790257739246-2" author="fynjy">
+        <createTable tableName="document_type">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="document_type_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(100)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1790257739246-3" author="fynjy">
+        <createTable tableName="employee">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="employee_pkey"/>
+            </column>
+            <column name="first_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="middle_name" type="VARCHAR(255)"/>
+            <column name="birth_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="position_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1790257739246-4" author="fynjy">
+        <createTable tableName="employee_department">
+            <column name="employee_id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="employee_department_pkey"/>
+            </column>
+            <column name="department_id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="employee_department_pkey"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1790257739246-5" author="fynjy">
+        <createTable tableName="employee_document">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="employee_document_pkey"/>
+            </column>
+            <column name="employee_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="document_type_id" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="doc_number" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="issue_date" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="issued_by" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1790257739246-6" author="fynjy">
+        <createTable tableName="position">
+            <column name="id" type="INT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="position_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="1790257739246-7" author="fynjy">
+        <addUniqueConstraint columnNames="name" constraintName="department_name_key" tableName="department"/>
+    </changeSet>
+    <changeSet id="1790257739246-8" author="fynjy">
+        <addUniqueConstraint columnNames="name" constraintName="document_type_name_key" tableName="document_type"/>
+    </changeSet>
+    <changeSet id="1790257739246-9" author="fynjy">
+        <addUniqueConstraint columnNames="email" constraintName="employee_email_key" tableName="employee"/>
+    </changeSet>
+    <changeSet id="1790257739246-10" author="fynjy">
+        <addUniqueConstraint columnNames="name" constraintName="position_name_key" tableName="position"/>
+    </changeSet>
+    <changeSet id="1790257739246-11" author="fynjy">
+        <addUniqueConstraint columnNames="document_type_id, doc_number" constraintName="uq_document_type_number"
+                             tableName="employee_document"/>
+    </changeSet>
+    <changeSet id="1790257739246-14" author="fynjy">
+        <createIndex indexName="idx_employee_documents_issue" tableName="employee_document">
+            <column name="issue_date"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1790257739246-15" author="fynjy">
+        <createIndex indexName="idx_employees_last_name" tableName="employee">
+            <column name="last_name"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1790257739246-17" author="fynjy">
+        <addForeignKeyConstraint baseColumnNames="department_id" baseTableName="employee_department"
+                                 constraintName="employee_department_department_id_fkey" onDelete="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="department"/>
+
+        <createIndex indexName="idx_emp_dep_department_id" tableName="employee_department">
+            <column name="department_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1790257739246-18" author="fynjy">
+        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="employee_department"
+                                 constraintName="employee_department_employee_id_fkey" onDelete="CASCADE"
+                                 referencedColumnNames="id" referencedTableName="employee"/>
+    </changeSet>
+    <changeSet id="1790257739246-19" author="fynjy">
+        <addForeignKeyConstraint baseColumnNames="document_type_id" baseTableName="employee_document"
+                                 constraintName="employee_document_document_type_id_fkey" onDelete="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="document_type"/>
+    </changeSet>
+    <changeSet id="1790257739246-20" author="fynjy">
+        <addForeignKeyConstraint baseColumnNames="employee_id" baseTableName="employee_document"
+                                 constraintName="employee_document_employee_id_fkey" onDelete="CASCADE"
+                                 referencedColumnNames="id" referencedTableName="employee"/>
+
+        <createIndex indexName="idx_employee_documents_employee" tableName="employee_document">
+            <column name="employee_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="1790257739246-21" author="fynjy">
+        <addForeignKeyConstraint baseColumnNames="position_id" baseTableName="employee"
+                                 constraintName="employee_position_id_fkey" onDelete="RESTRICT"
+                                 referencedColumnNames="id" referencedTableName="position"/>
+
+        <createIndex indexName="idx_employees_position_id" tableName="employee">
+            <column name="position_id"/>
+        </createIndex>
+    </changeSet>
+
+</databaseChangeLog>
