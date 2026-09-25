@@ -154,4 +154,11 @@
         </createIndex>
     </changeSet>
 
+    <changeSet id="1790257739246-22" author="fynjy">
+        <sqlFile path="db/schema/data_staff.sql"
+                 relativeToChangelogFile="false"
+                 splitStatements="true"
+                 endDelimiter=";"/>
+    </changeSet>
+
 </databaseChangeLog>
